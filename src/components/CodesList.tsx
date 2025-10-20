@@ -15,7 +15,6 @@ export function CodesList() {
   const [pullDistance, setPullDistance] = useState(0);
   const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(true);
   const [autoRefreshInterval, setAutoRefreshInterval] = useState(30); // 默认30秒
-  const [currentTime, setCurrentTime] = useState(new Date());
   const [showCopyToast, setShowCopyToast] = useState(false);
 
   const touchStartY = useRef(0);
@@ -58,14 +57,6 @@ export function CodesList() {
   useEffect(() => {
     refreshCodes();
   }, [refreshCodes]);
-
-  // 更新当前时间
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   // 自动刷新
   useEffect(() => {
@@ -165,8 +156,8 @@ export function CodesList() {
     <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900 relative">
       {/* 复制成功提示 */}
       {showCopyToast && (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in">
-          <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2">
+        <div className="fixed top-20 left-0 right-0 flex justify-center z-50 px-4">
+          <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in">
             <Check className="w-5 h-5" />
             <span className="font-medium">已复制到剪贴板</span>
           </div>
@@ -175,12 +166,7 @@ export function CodesList() {
       {/* 头部 */}
       <div className="bg-white dark:bg-gray-800 shadow-sm">
         <div className="px-4 py-3 flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white">验证码</h1>
-            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              {currentTime.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-            </div>
-          </div>
+          <h1 className="text-lg font-bold text-gray-900 dark:text-white">Cloudflare Worker 邮箱接码</h1>
           <div className="flex gap-2">
             <button
               onClick={refreshCodes}
@@ -204,15 +190,18 @@ export function CodesList() {
 
         {/* 自动刷新控制 */}
         <div className="px-4 pb-3 flex items-center justify-between bg-gray-50 dark:bg-gray-900/50 py-2 mx-4 rounded-lg">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+          <div className="flex items-center gap-2">
             <input
               type="checkbox"
+              id="auto-refresh"
               checked={autoRefreshEnabled}
               onChange={(e) => setAutoRefreshEnabled(e.target.checked)}
               className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
             />
-            自动刷新
-          </label>
+            <label htmlFor="auto-refresh" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer select-none">
+              自动刷新
+            </label>
+          </div>
           {autoRefreshEnabled && (
             <div className="flex items-center gap-2">
               <span className="text-xs text-gray-500 dark:text-gray-400">间隔:</span>
@@ -330,15 +319,16 @@ export function CodesList() {
                   </button>
                 </div>
 
-                {/* 手机号 */}
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
-                  <span>📱</span>
-                  <span className="flex-1">{code.phone}</span>
+                {/* 邮箱号 */}
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  <span className="inline-block w-5">�</span>
+                  <span>{code.phone}</span>
                 </div>
 
                 {/* 时间 */}
                 <div className="text-xs text-gray-500 dark:text-gray-500">
-                  🕐 {formatRelativeTime(code.time)}
+                  <span className="inline-block w-5">🕐</span>
+                  <span>{formatRelativeTime(code.time)}</span>
                 </div>
               </div>
             ))}
