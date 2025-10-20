@@ -34,7 +34,9 @@
       "justNow": "剛剛",
       "minutesAgo": "{{count}}分鐘前",
       "hoursAgo": "{{count}}小時前",
-      "daysAgo": "{{count}}天前"
+      "daysAgo": "{{count}}天前",
+      "monthsAgo": "{{count}}個月前",
+      "yearsAgo": "{{count}}年前"
     },
     "confirmClear": "確定要清空所有驗證碼嗎？",
     "clearSuccess": "清空成功",
@@ -44,37 +46,33 @@
     "title": "設定",
     "apiConfig": {
       "title": "接碼 API 配置",
-      "urlLabel": "接碼 API URL",
-      "urlPlaceholder": "https://your-worker.workers.dev/api/codes",
+      "label": "接碼 Cloudflare Worker API 地址",
+      "description": "用於獲取驗證碼的 API 地址",
       "testConnection": "測試連線",
       "testing": "測試中...",
-      "testSuccess": "連線成功",
-      "testFailed": "連線失敗",
-      "saveSuccess": "儲存成功"
+      "testSuccess": "連線成功！URL 配置正確",
+      "testFailed": "連線失敗，請檢查 URL 是否正確"
     },
-    "deleteApiConfig": {
+    "deleteApi": {
       "title": "刪除 API 配置",
-      "description": "配置後可使用「清空所有」功能",
-      "urlLabel": "刪除 API URL",
-      "urlPlaceholder": "https://your-worker.workers.dev/api/delete"
+      "label": "刪除 Cloudflare Worker API 地址",
+      "description": "用於清空所有郵件的 API 地址（可選）"
     },
     "appearance": {
-      "title": "外觀設定",
-      "darkMode": "深色模式"
+      "title": "外觀",
+      "darkMode": "深色模式",
+      "language": "語言"
     },
-    "language": {
-      "title": "語言設定",
-      "label": "選擇語言",
-      "zh-CN": "简体中文",
-      "zh-TW": "繁體中文",
-      "en": "English",
-      "ja": "日本語",
-      "ko": "한국어"
+    "usage": {
+      "title": "使用說明",
+      "step1": "在上方輸入框中填入你的 Cloudflare Worker API 地址",
+      "step2": "點擊「測試連線」按鈕驗證 URL 是否可用",
+      "step3": "切換到「驗證碼」標籤頁，點擊重新整理按鈕獲取最新資料"
     },
     "apiFormat": {
       "title": "API 格式要求",
       "description": "Worker API 應返回以下格式之一：",
-      "exampleTitle": "Cloudflare Worker 範例程式碼",
+      "exampleCode": "Cloudflare Worker 範例程式碼",
       "viewExample": "查看完整範例程式碼"
     }
   },
@@ -82,7 +80,7 @@
     "title": "關於",
     "version": "版本",
     "type": "類型",
-    "typeValue": "PWA 應用程式",
+    "pwaApp": "PWA 應用",
     "author": "作者",
     "blog": "部落格"
   },

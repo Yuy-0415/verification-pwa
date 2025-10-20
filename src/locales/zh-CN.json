@@ -34,7 +34,9 @@
       "justNow": "刚刚",
       "minutesAgo": "{{count}}分钟前",
       "hoursAgo": "{{count}}小时前",
-      "daysAgo": "{{count}}天前"
+      "daysAgo": "{{count}}天前",
+      "monthsAgo": "{{count}}个月前",
+      "yearsAgo": "{{count}}年前"
     },
     "confirmClear": "确定要清空所有验证码吗？",
     "clearSuccess": "清空成功",
@@ -44,37 +46,33 @@
     "title": "设置",
     "apiConfig": {
       "title": "接码 API 配置",
-      "urlLabel": "接码 API URL",
-      "urlPlaceholder": "https://your-worker.workers.dev/api/codes",
+      "label": "接码 Cloudflare Worker API 地址",
+      "description": "用于获取验证码的 API 地址",
       "testConnection": "测试连接",
       "testing": "测试中...",
-      "testSuccess": "连接成功",
-      "testFailed": "连接失败",
-      "saveSuccess": "保存成功"
+      "testSuccess": "连接成功！URL 配置正确",
+      "testFailed": "连接失败，请检查 URL 是否正确"
     },
-    "deleteApiConfig": {
+    "deleteApi": {
       "title": "删除 API 配置",
-      "description": "配置后可使用'清空所有'功能",
-      "urlLabel": "删除 API URL",
-      "urlPlaceholder": "https://your-worker.workers.dev/api/delete"
+      "label": "删除 Cloudflare Worker API 地址",
+      "description": "用于清空所有邮件的 API 地址（可选）"
     },
     "appearance": {
-      "title": "外观设置",
-      "darkMode": "深色模式"
+      "title": "外观",
+      "darkMode": "深色模式",
+      "language": "语言"
     },
-    "language": {
-      "title": "语言设置",
-      "label": "选择语言",
-      "zh-CN": "简体中文",
-      "zh-TW": "繁體中文",
-      "en": "English",
-      "ja": "日本語",
-      "ko": "한국어"
+    "usage": {
+      "title": "使用说明",
+      "step1": "在上方输入框中填入你的 Cloudflare Worker API 地址",
+      "step2": "点击「测试连接」按钮验证 URL 是否可用",
+      "step3": "切换到「验证码」标签页，点击刷新按钮获取最新数据"
     },
     "apiFormat": {
       "title": "API 格式要求",
       "description": "Worker API 应返回以下格式之一：",
-      "exampleTitle": "Cloudflare Worker 示例代码",
+      "exampleCode": "Cloudflare Worker 示例代码",
       "viewExample": "查看完整示例代码"
     }
   },
@@ -82,7 +80,7 @@
     "title": "关于",
     "version": "版本",
     "type": "类型",
-    "typeValue": "PWA 应用",
+    "pwaApp": "PWA 应用",
     "author": "作者",
     "blog": "博客"
   },

@@ -340,7 +340,7 @@ export function CodesList() {
                 {/* 时间 */}
                 <div className="text-xs text-gray-500 dark:text-gray-500 flex items-center gap-1">
                   <span className="inline-block w-5">🕐</span>
-                  <span>{formatRelativeTime(code.time)}</span>
+                  <span>{formatRelativeTime(code.time, t)}</span>
                 </div>
               </div>
             ))}

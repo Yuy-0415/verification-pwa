@@ -34,7 +34,9 @@
       "justNow": "たった今",
       "minutesAgo": "{{count}}分前",
       "hoursAgo": "{{count}}時間前",
-      "daysAgo": "{{count}}日前"
+      "daysAgo": "{{count}}日前",
+      "monthsAgo": "{{count}}ヶ月前",
+      "yearsAgo": "{{count}}年前"
     },
     "confirmClear": "すべての認証コードをクリアしてもよろしいですか？",
     "clearSuccess": "クリアしました",
@@ -44,37 +46,33 @@
     "title": "設定",
     "apiConfig": {
       "title": "API 設定",
-      "urlLabel": "API URL",
-      "urlPlaceholder": "https://your-worker.workers.dev/api/codes",
+      "label": "Cloudflare Worker API URL",
+      "description": "認証コード取得用の API アドレス",
       "testConnection": "接続テスト",
       "testing": "テスト中...",
-      "testSuccess": "接続成功",
-      "testFailed": "接続失敗",
-      "saveSuccess": "保存しました"
+      "testSuccess": "接続成功！URL が正しく設定されています",
+      "testFailed": "接続失敗、URL を確認してください"
     },
-    "deleteApiConfig": {
+    "deleteApi": {
       "title": "削除 API 設定",
-      "description": "設定後「すべてクリア」機能が使用できます",
-      "urlLabel": "削除 API URL",
-      "urlPlaceholder": "https://your-worker.workers.dev/api/delete"
+      "label": "削除 Cloudflare Worker API URL",
+      "description": "すべてのメールをクリアするための API アドレス（オプション）"
     },
     "appearance": {
-      "title": "外観設定",
-      "darkMode": "ダークモード"
+      "title": "外観",
+      "darkMode": "ダークモード",
+      "language": "言語"
     },
-    "language": {
-      "title": "言語設定",
-      "label": "言語を選択",
-      "zh-CN": "简体中文",
-      "zh-TW": "繁體中文",
-      "en": "English",
-      "ja": "日本語",
-      "ko": "한국어"
+    "usage": {
+      "title": "使用ガイド",
+      "step1": "上の入力欄に Cloudflare Worker API URL を入力してください",
+      "step2": "「接続テスト」ボタンをクリックして URL を確認してください",
+      "step3": "「認証コード」タブに切り替えて、更新ボタンをクリックして最新データを取得してください"
     },
     "apiFormat": {
       "title": "API フォーマット要件",
       "description": "Worker API は次のいずれかの形式を返す必要があります：",
-      "exampleTitle": "Cloudflare Worker サンプルコード",
+      "exampleCode": "Cloudflare Worker サンプルコード",
       "viewExample": "完全なサンプルコードを表示"
     }
   },
@@ -82,7 +80,7 @@
     "title": "について",
     "version": "バージョン",
     "type": "タイプ",
-    "typeValue": "PWA アプリケーション",
+    "pwaApp": "PWA アプリ",
     "author": "作者",
     "blog": "ブログ"
   },

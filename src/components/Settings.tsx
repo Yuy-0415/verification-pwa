@@ -83,7 +83,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
     onDarkModeChange(newValue);
   };
 
-  // 语言列表（动态排序：当前语言排第一）
+  // 语言列表（固定排序）
   const languages = [
     { code: 'zh-CN', name: '中文简体', nativeName: '中文简体' },
     { code: 'zh-TW', name: '中文繁體', nativeName: '中文繁體' },
@@ -91,13 +91,6 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
     { code: 'ja', name: '日本語', nativeName: '日本語' },
     { code: 'ko', name: '한국어', nativeName: '한국어' },
   ];
-
-  // 动态排序：当前语言排第一
-  const sortedLanguages = [...languages].sort((a, b) => {
-    if (a.code === i18n.language) return -1;
-    if (b.code === i18n.language) return 1;
-    return 0;
-  });
 
   // 切换语言
   const handleLanguageChange = (langCode: string) => {
@@ -280,7 +273,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
               <span className="text-gray-900 dark:text-white">{t('settings.appearance.language')}</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {sortedLanguages.map((lang) => (
+              {languages.map((lang) => (
                 <button
                   key={lang.code}
                   onClick={() => handleLanguageChange(lang.code)}
