@@ -32,7 +32,7 @@ function App() {
   };
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div className="h-screen flex flex-col overflow-hidden safe-area-container">
       {/* 主内容区域 */}
       <div className="flex-1 overflow-hidden">
         {currentPage === 'codes' && <CodesList />}

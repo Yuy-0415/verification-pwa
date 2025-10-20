@@ -26,8 +26,19 @@ body {
 }
 
 /* iOS 安全区域支持 */
+.safe-area-container {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
 .safe-area-inset-bottom {
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-inset-top {
+  padding-top: env(safe-area-inset-top);
 }
 
 /* 滚动条样式 */
