@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { RefreshCw, Copy, Check, Trash2, AlertCircle } from 'lucide-react';
 import type { VerificationCode } from '../types';
 import { fetchVerificationCodes, APIError } from '../services/api';
@@ -11,6 +11,13 @@ export function CodesList() {
   const [error, setError] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [lastRefreshTime, setLastRefreshTime] = useState<Date | null>(null);
+  const [isPulling, setIsPulling] = useState(false);
+  const [pullDistance, setPullDistance] = useState(0);
+  const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(true);
+  const [autoRefreshInterval, setAutoRefreshInterval] = useState(30); // 默认30秒
+
+  const touchStartY = useRef(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // 刷新验证码列表
   const refreshCodes = useCallback(async () => {
@@ -49,6 +56,50 @@ export function CodesList() {
   useEffect(() => {
     refreshCodes();
   }, [refreshCodes]);
+
+  // 自动刷新
+  useEffect(() => {
+    if (!autoRefreshEnabled || autoRefreshInterval <= 0) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      refreshCodes();
+    }, autoRefreshInterval * 1000);
+
+    return () => clearInterval(intervalId);
+  }, [autoRefreshEnabled, autoRefreshInterval, refreshCodes]);
+
+  // 下拉刷新 - 触摸开始
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const container = scrollContainerRef.current;
+    if (!container || container.scrollTop > 0) return;
+
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  // 下拉刷新 - 触摸移动
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const container = scrollContainerRef.current;
+    if (!container || container.scrollTop > 0 || isLoading) return;
+
+    const touchY = e.touches[0].clientY;
+    const distance = touchY - touchStartY.current;
+
+    if (distance > 0) {
+      setPullDistance(Math.min(distance, 100));
+      setIsPulling(distance > 60);
+    }
+  };
+
+  // 下拉刷新 - 触摸结束
+  const handleTouchEnd = () => {
+    if (isPulling && !isLoading) {
+      refreshCodes();
+    }
+    setPullDistance(0);
+    setIsPulling(false);
+  };
 
   // 复制验证码
   const copyCode = async (code: VerificationCode) => {
@@ -101,6 +152,33 @@ export function CodesList() {
             )}
           </div>
         </div>
+
+        {/* 自动刷新控制 */}
+        <div className="px-4 pb-3 flex items-center gap-4">
+          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+            <input
+              type="checkbox"
+              checked={autoRefreshEnabled}
+              onChange={(e) => setAutoRefreshEnabled(e.target.checked)}
+              className="w-4 h-4 rounded"
+            />
+            自动刷新
+          </label>
+          {autoRefreshEnabled && (
+            <select
+              value={autoRefreshInterval}
+              onChange={(e) => setAutoRefreshInterval(Number(e.target.value))}
+              className="px-2 py-1 text-sm border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            >
+              <option value={10}>10秒</option>
+              <option value={30}>30秒</option>
+              <option value={60}>1分钟</option>
+              <option value={120}>2分钟</option>
+              <option value={300}>5分钟</option>
+            </select>
+          )}
+        </div>
+
         {lastRefreshTime && (
           <div className="px-4 pb-2 text-xs text-gray-500 dark:text-gray-400">
             最后刷新: {formatAbsoluteTime(lastRefreshTime.getTime())}
@@ -109,7 +187,30 @@ export function CodesList() {
       </div>
 
       {/* 内容区域 */}
-      <div className="flex-1 overflow-y-auto">
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 overflow-y-auto relative"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* 下拉刷新指示器 */}
+        {pullDistance > 0 && (
+          <div
+            className="absolute top-0 left-0 right-0 flex items-center justify-center transition-all"
+            style={{
+              height: `${pullDistance}px`,
+              opacity: pullDistance / 100
+            }}
+          >
+            <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
+              <RefreshCw className={`w-4 h-4 ${isPulling ? 'animate-spin' : ''}`} />
+              {isPulling ? '松开刷新' : '下拉刷新'}
+            </div>
+          </div>
+        )}
+
+        <div style={{ paddingTop: pullDistance > 0 ? `${pullDistance}px` : '0' }}>
         {/* 错误提示 */}
         {error && (
           <div className="m-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-start gap-3">
@@ -196,6 +297,7 @@ export function CodesList() {
             ))}
           </div>
         )}
+        </div>
       </div>
     </div>
   );
