@@ -15,11 +15,26 @@ export interface VerificationCode {
 }
 
 /**
+ * 邮件数据类型（Worker 返回格式）
+ */
+export interface EmailData {
+  id: string;
+  from: string;
+  to: string;
+  subject: string;
+  content: string;
+  verificationCode?: string;
+  receivedAt: number;
+  hasVerificationCode: boolean;
+}
+
+/**
  * API 响应格式 1：带状态包装
  */
 export interface APIResponse {
   success: boolean;
-  data: VerificationCode[];
+  data?: VerificationCode[];
+  emails?: EmailData[];
   message?: string;
 }
 

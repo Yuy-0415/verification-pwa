@@ -1,4 +1,4 @@
-import type { VerificationCode, APIResponse } from '../types';
+import type { VerificationCode, APIResponse, EmailData } from '../types';
 
 /**
  * API 错误类
@@ -67,25 +67,56 @@ export async function fetchVerificationCodes(url: string): Promise<VerificationC
  * 解析验证码数据，支持多种格式
  */
 function parseVerificationCodes(data: unknown): VerificationCode[] {
-  // 格式 1: { success: true, data: [...] }
-  if (isAPIResponse(data)) {
+  // 格式 1: { success: true, emails: [...] } - Worker 邮件格式
+  if (isAPIResponse(data) && data.emails) {
+    return convertEmailsToVerificationCodes(data.emails);
+  }
+
+  // 格式 2: { success: true, data: [...] }
+  if (isAPIResponse(data) && data.data) {
     if (!data.success) {
       throw new APIError(data.message || '服务器返回失败', 'SERVER_ERROR');
     }
     return normalizeVerificationCodes(data.data);
   }
 
-  // 格式 2: { data: [...] }
+  // 格式 3: { data: [...] }
   if (isObject(data) && 'data' in data && Array.isArray(data.data)) {
     return normalizeVerificationCodes(data.data);
   }
 
-  // 格式 3: 直接是数组 [...]
+  // 格式 4: { emails: [...] } - 直接邮件数组
+  if (isObject(data) && 'emails' in data && Array.isArray(data.emails)) {
+    return convertEmailsToVerificationCodes(data.emails);
+  }
+
+  // 格式 5: 直接是数组 [...]
   if (Array.isArray(data)) {
     return normalizeVerificationCodes(data);
   }
 
   throw new APIError('无法解析服务器返回的数据格式', 'PARSE_ERROR');
+}
+
+/**
+ * 将邮件数据转换为验证码数据
+ */
+function convertEmailsToVerificationCodes(emails: unknown[]): VerificationCode[] {
+  return emails
+    .filter((email): email is EmailData => {
+      return isObject(email) &&
+             'hasVerificationCode' in email &&
+             email.hasVerificationCode === true &&
+             'verificationCode' in email &&
+             typeof email.verificationCode === 'string';
+    })
+    .map((email) => ({
+      id: email.id,
+      code: email.verificationCode!,
+      phone: email.to,
+      time: email.receivedAt,
+      source: email.from,
+    }));
 }
 
 /**
@@ -135,8 +166,8 @@ function isAPIResponse(data: unknown): data is APIResponse {
     isObject(data) &&
     'success' in data &&
     typeof data.success === 'boolean' &&
-    'data' in data &&
-    Array.isArray(data.data)
+    (('data' in data && Array.isArray(data.data)) ||
+     ('emails' in data && Array.isArray(data.emails)))
   );
 }
 
