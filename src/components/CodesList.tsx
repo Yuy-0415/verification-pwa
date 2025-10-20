@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { RefreshCw, Copy, Check, Trash2, AlertCircle } from 'lucide-react';
 import type { VerificationCode } from '../types';
 import { fetchVerificationCodes, APIError } from '../services/api';
-import { getWorkerURL } from '../utils/storage';
+import { getWorkerURL, getDeleteURL } from '../utils/storage';
 import { formatRelativeTime, formatAbsoluteTime } from '../utils/time';
 
 export function CodesList() {
@@ -127,9 +127,35 @@ export function CodesList() {
   };
 
   // 清空所有验证码
-  const clearAll = () => {
-    if (confirm('确定要清空所有验证码吗？')) {
+  const clearAll = async () => {
+    const deleteUrl = getDeleteURL();
+
+    if (!deleteUrl) {
+      alert('请先在设置中配置删除 API URL');
+      return;
+    }
+
+    if (!confirm('确定要清空所有邮件吗？此操作将调用删除 API。')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(deleteUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('删除失败');
+      }
+
       setCodes([]);
+      alert('清空成功！');
+    } catch (error) {
+      console.error('清空失败:', error);
+      alert('清空失败，请检查删除 API 配置');
     }
   };
 
@@ -195,6 +221,7 @@ export function CodesList() {
                 onChange={(e) => setAutoRefreshInterval(Number(e.target.value))}
                 className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
+                <option value={5}>5秒</option>
                 <option value={10}>10秒</option>
                 <option value={30}>30秒</option>
                 <option value={60}>1分钟</option>
@@ -310,16 +337,9 @@ export function CodesList() {
                 </div>
 
                 {/* 时间 */}
-                <div className="text-xs text-gray-500 dark:text-gray-500 mb-1">
+                <div className="text-xs text-gray-500 dark:text-gray-500">
                   🕐 {formatRelativeTime(code.time)}
                 </div>
-
-                {/* 来源 */}
-                {code.source && (
-                  <div className="text-xs text-gray-500 dark:text-gray-500 truncate">
-                    🏷️ {code.source}
-                  </div>
-                )}
               </div>
             ))}
           </div>

@@ -6,6 +6,7 @@ import type { AppConfig } from '../types';
 
 const STORAGE_KEYS = {
   WORKER_URL: 'workerURL',
+  DELETE_URL: 'deleteURL',
   DARK_MODE: 'darkMode',
   AUTO_REFRESH: 'autoRefreshInterval',
 } as const;
@@ -22,6 +23,20 @@ export function getWorkerURL(): string {
  */
 export function setWorkerURL(url: string): void {
   localStorage.setItem(STORAGE_KEYS.WORKER_URL, url);
+}
+
+/**
+ * 获取删除 API URL
+ */
+export function getDeleteURL(): string {
+  return localStorage.getItem(STORAGE_KEYS.DELETE_URL) || '';
+}
+
+/**
+ * 保存删除 API URL
+ */
+export function setDeleteURL(url: string): void {
+  localStorage.setItem(STORAGE_KEYS.DELETE_URL, url);
 }
 
 /**
