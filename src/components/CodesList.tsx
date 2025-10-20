@@ -14,7 +14,7 @@ export function CodesList() {
   const [isPulling, setIsPulling] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
   const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(true);
-  const [autoRefreshInterval, setAutoRefreshInterval] = useState(30); // 默认30秒
+  const [autoRefreshInterval, setAutoRefreshInterval] = useState(5); // 默认5秒
   const [showCopyToast, setShowCopyToast] = useState(false);
 
   const touchStartY = useRef(0);
@@ -89,8 +89,8 @@ export function CodesList() {
     const distance = touchY - touchStartY.current;
 
     if (distance > 0) {
-      setPullDistance(Math.min(distance, 100));
-      setIsPulling(distance > 60);
+      setPullDistance(Math.min(distance, 80));
+      setIsPulling(distance > 50);
     }
   };
 
@@ -252,7 +252,7 @@ export function CodesList() {
             className="absolute top-0 left-0 right-0 flex items-center justify-center transition-all"
             style={{
               height: `${pullDistance}px`,
-              opacity: pullDistance / 100
+              opacity: pullDistance / 80
             }}
           >
             <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
@@ -330,13 +330,13 @@ export function CodesList() {
                 </div>
 
                 {/* 邮箱号 */}
-                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1 flex items-center gap-1">
                   <span className="inline-block w-5">📧</span>
                   <span>{code.phone}</span>
                 </div>
 
                 {/* 时间 */}
-                <div className="text-xs text-gray-500 dark:text-gray-500">
+                <div className="text-xs text-gray-500 dark:text-gray-500 flex items-center gap-1">
                   <span className="inline-block w-5">🕐</span>
                   <span>{formatRelativeTime(code.time)}</span>
                 </div>

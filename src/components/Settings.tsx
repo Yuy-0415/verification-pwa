@@ -99,7 +99,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                接码 API URL
+                接码 Cloudflare Worker API 地址
               </label>
               <input
                 type="url"
@@ -158,7 +158,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
         {/* 删除 API 配置 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            删除 API 配置
+            删除 Cloudflare Worker API 地址
           </h2>
 
           <div className="space-y-3">
