@@ -201,7 +201,7 @@ export function CodesList() {
         </div>
 
         {/* 自动刷新控制 */}
-        <div className="px-4 pb-3 flex items-center justify-between bg-gray-50 dark:bg-gray-900/50 py-2 mx-4 rounded-lg">
+        <div className="px-4 pb-3 pt-2 flex items-center justify-between bg-gray-50 dark:bg-gray-900/50 py-2 mx-4 mb-2 rounded-lg">
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
