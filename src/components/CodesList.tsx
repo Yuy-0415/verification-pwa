@@ -332,7 +332,7 @@ export function CodesList() {
                 {/* 邮箱号 */}
                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-1 flex items-center gap-1">
                   <span className="inline-block w-5">📧</span>
-                  <span>{code.phone}</span>
+                  <span>{code.email}</span>
                 </div>
 
                 {/* 时间 */}

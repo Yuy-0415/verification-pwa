@@ -6,8 +6,8 @@ export interface VerificationCode {
   id: string;
   /** 验证码内容 */
   code: string;
-  /** 手机号（可能是脱敏的） */
-  phone: string;
+  /** 邮箱地址 */
+  email: string;
   /** 接收时间（ISO 8601 格式或时间戳） */
   time: string | number;
   /** 来源信息（可选） */

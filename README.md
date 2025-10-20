@@ -1,6 +1,6 @@
-# 📱 验证码接收 PWA 应用
+# 📱 Cloudflare Worker 邮箱接码 PWA 应用
 
-一个现代化的渐进式 Web 应用（PWA），用于接收和管理来自 Cloudflare Worker 的验证码。
+一个现代化的渐进式 Web 应用（PWA），用于接收和管理来自 Cloudflare Worker 的邮箱验证码。
 
 ## ✨ 功能特性
 
@@ -57,23 +57,29 @@ npm run preview
 
 ## 📖 使用说明
 
-### 1. 配置 Worker URL
+### 1. 配置接码 API
 
 1. 打开应用，切换到 **设置** 标签页
-2. 在 **Worker URL** 输入框中填入你的 Cloudflare Worker API 地址
+2. 在 **接码 API URL** 输入框中填入你的 Cloudflare Worker API 地址
    - 例如：`https://your-worker.workers.dev/api/codes`
 3. 点击 **测试连接** 验证 URL 是否可用
 4. 配置会自动保存到浏览器本地存储
 
-### 2. 查看验证码
+### 2. 配置删除 API（可选）
+
+1. 在设置页面的 **删除 API 配置** 区域
+2. 填入删除邮件的 API 地址
+3. 点击 **测试连接** 验证 URL 是否可用
+4. 配置后可使用"清空所有"功能
+
+### 3. 查看验证码
 
 1. 切换到 **验证码** 标签页
 2. 点击右上角的刷新按钮获取最新验证码
-3. 点击验证码右侧的复制按钮可快速复制
-4. 点击验证码下方的删除按钮可删除单条记录
-5. 点击右上角的垃圾桶图标可清空所有验证码
+3. 点击验证码数字或右侧的复制按钮可快速复制
+4. 点击右上角的垃圾桶图标可清空所有验证码（需配置删除 API）
 
-### 3. 添加到主屏幕（iOS）
+### 4. 添加到主屏幕（iOS）
 
 1. 在 Safari 浏览器中打开应用
 2. 点击底部的 **分享** 按钮
@@ -82,7 +88,7 @@ npm run preview
 
 之后就可以像原生 APP 一样从主屏幕启动应用了！
 
-### 4. 添加到主屏幕（Android）
+### 5. 添加到主屏幕（Android）
 
 1. 在 Chrome 浏览器中打开应用
 2. 点击右上角的菜单按钮（三个点）
@@ -93,7 +99,27 @@ npm run preview
 
 你的 Cloudflare Worker 应该返回以下格式之一的 JSON 数据：
 
-### 格式 1：带状态包装（推荐）
+### 格式 1：邮件格式（推荐）
+
+```json
+{
+  "success": true,
+  "emails": [
+    {
+      "id": "uuid-1",
+      "from": "noreply@example.com",
+      "to": "user@example.com",
+      "subject": "验证码",
+      "content": "您的验证码是 123456",
+      "verificationCode": "123456",
+      "receivedAt": 1729411200000,
+      "hasVerificationCode": true
+    }
+  ]
+}
+```
+
+### 格式 2：带状态包装
 
 ```json
 {
@@ -102,7 +128,7 @@ npm run preview
     {
       "id": "uuid-1",
       "code": "123456",
-      "phone": "+86 138****1234",
+      "email": "user@example.com",
       "time": "2025-10-20T10:30:00Z",
       "source": "某服务"
     }
@@ -111,13 +137,13 @@ npm run preview
 }
 ```
 
-### 格式 2：直接数组
+### 格式 3：直接数组
 
 ```json
 [
   {
     "code": "123456",
-    "phone": "+86 138****1234",
+    "email": "user@example.com",
     "time": "2025-10-20T10:30:00Z"
   }
 ]
@@ -129,7 +155,7 @@ npm run preview
 |------|------|------|------|
 | `id` | String | 否 | 唯一标识符（如不提供会自动生成） |
 | `code` | String | 是 | 验证码内容 |
-| `phone` | String | 是 | 手机号（建议脱敏处理） |
+| `email` | String | 是 | 邮箱地址 |
 | `time` | String/Number | 是 | 接收时间（ISO8601 格式或时间戳） |
 | `source` | String | 否 | 来源信息 |
 

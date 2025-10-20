@@ -119,7 +119,7 @@ function convertEmailsToVerificationCodes(emails: unknown[]): VerificationCode[]
     .map((email) => ({
       id: email.id,
       code: email.verificationCode!,
-      phone: email.to,
+      email: email.to,
       time: email.receivedAt,
       source: email.from,
     }));
@@ -143,11 +143,13 @@ function normalizeVerificationCodes(codes: unknown[]): VerificationCode[] {
       ? item.code
       : '';
 
-    const phone = 'phone' in item && typeof item.phone === 'string'
+    const email = ('email' in item && typeof item.email === 'string')
+      ? item.email
+      : ('phone' in item && typeof item.phone === 'string')
       ? item.phone
       : '';
 
-    const time = 'time' in item 
+    const time = 'time' in item
       ? item.time as string | number
       : Date.now();
 
@@ -156,11 +158,11 @@ function normalizeVerificationCodes(codes: unknown[]): VerificationCode[] {
       : undefined;
 
     // 验证必填字段
-    if (!code || !phone) {
+    if (!code || !email) {
       throw new APIError('验证码数据缺少必填字段', 'MISSING_FIELDS');
     }
 
-    return { id, code, phone, time, source };
+    return { id, code, email, time, source };
   });
 }
 
