@@ -15,8 +15,7 @@ export function CodesList() {
   const [lastRefreshTime, setLastRefreshTime] = useState<Date | null>(null);
   const [isPulling, setIsPulling] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
-  const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(true);
-  const [autoRefreshInterval, setAutoRefreshInterval] = useState(5); // 默认5秒
+  const [autoRefreshInterval, setAutoRefreshInterval] = useState(5); // 默认5秒，0表示关闭
   const [showCopyToast, setShowCopyToast] = useState(false);
 
   const touchStartY = useRef(0);
@@ -63,7 +62,7 @@ export function CodesList() {
 
   // 自动刷新
   useEffect(() => {
-    if (!autoRefreshEnabled || autoRefreshInterval <= 0) {
+    if (autoRefreshInterval <= 0) {
       return;
     }
 
@@ -72,7 +71,7 @@ export function CodesList() {
     }, autoRefreshInterval * 1000);
 
     return () => clearInterval(intervalId);
-  }, [autoRefreshEnabled, autoRefreshInterval, refreshCodes]);
+  }, [autoRefreshInterval, refreshCodes]);
 
   // 下拉刷新 - 触摸开始
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -201,36 +200,23 @@ export function CodesList() {
         </div>
 
         {/* 自动刷新控制 */}
-        <div className="px-4 pb-3 flex items-center justify-between bg-gray-50 dark:bg-gray-900/50 py-2 mx-4 rounded-lg">
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="auto-refresh"
-              checked={autoRefreshEnabled}
-              onChange={(e) => setAutoRefreshEnabled(e.target.checked)}
-              className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500 cursor-pointer"
-            />
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 select-none">
-              {t('codes.autoRefresh.label')}
-            </span>
-          </div>
-          {autoRefreshEnabled && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 dark:text-gray-400">{t('codes.autoRefresh.interval')}:</span>
-              <select
-                value={autoRefreshInterval}
-                onChange={(e) => setAutoRefreshInterval(Number(e.target.value))}
-                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value={5}>{t('codes.autoRefresh.5s')}</option>
-                <option value={10}>{t('codes.autoRefresh.10s')}</option>
-                <option value={30}>{t('codes.autoRefresh.30s')}</option>
-                <option value={60}>{t('codes.autoRefresh.1m')}</option>
-                <option value={120}>{t('codes.autoRefresh.2m')}</option>
-                <option value={300}>{t('codes.autoRefresh.5m')}</option>
-              </select>
-            </div>
-          )}
+        <div className="px-4 pb-3 pt-2 flex items-center justify-between bg-gray-50 dark:bg-gray-900/50 py-2 mx-4 mb-2 rounded-lg">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            {t('codes.autoRefresh.label')}
+          </span>
+          <select
+            value={autoRefreshInterval}
+            onChange={(e) => setAutoRefreshInterval(Number(e.target.value))}
+            className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value={0}>{t('codes.autoRefresh.off')}</option>
+            <option value={5}>{t('codes.autoRefresh.5s')}</option>
+            <option value={10}>{t('codes.autoRefresh.10s')}</option>
+            <option value={30}>{t('codes.autoRefresh.30s')}</option>
+            <option value={60}>{t('codes.autoRefresh.1m')}</option>
+            <option value={120}>{t('codes.autoRefresh.2m')}</option>
+            <option value={300}>{t('codes.autoRefresh.5m')}</option>
+          </select>
         </div>
 
         {lastRefreshTime && (

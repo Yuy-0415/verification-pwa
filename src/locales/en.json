@@ -22,7 +22,7 @@
     "refreshing": "Refreshing...",
     "autoRefresh": {
       "label": "Auto Refresh",
-      "interval": "Refresh Interval",
+      "off": "Off",
       "5s": "5 seconds",
       "10s": "10 seconds",
       "30s": "30 seconds",

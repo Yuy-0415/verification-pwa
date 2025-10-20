@@ -22,7 +22,7 @@
     "refreshing": "刷新中...",
     "autoRefresh": {
       "label": "自动刷新",
-      "interval": "刷新间隔",
+      "off": "关闭",
       "5s": "5秒",
       "10s": "10秒",
       "30s": "30秒",
