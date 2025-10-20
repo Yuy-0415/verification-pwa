@@ -90,16 +90,16 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
 
       {/* 内容区域 */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {/* Worker URL 配置 */}
+        {/* 接码 API 配置 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            API 配置
+            接码 API 配置
           </h2>
-          
+
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Worker URL
+                接码 API URL
               </label>
               <input
                 type="url"
@@ -110,7 +110,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                请输入 Cloudflare Worker 的完整 URL 地址
+                用于获取验证码的 API 地址
               </p>
             </div>
 
