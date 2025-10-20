@@ -13,9 +13,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
   const [url, setUrl] = useState('');
   const [deleteUrl, setDeleteUrlState] = useState('');
   const [isTesting, setIsTesting] = useState(false);
-  const [isTestingDelete, setIsTestingDelete] = useState(false);
   const [testResult, setTestResult] = useState<'success' | 'error' | null>(null);
-  const [deleteTestResult, setDeleteTestResult] = useState<'success' | 'error' | null>(null);
   const [darkMode, setDarkModeState] = useState(false);
 
   // 加载配置
@@ -34,7 +32,6 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
   // 保存删除 URL
   const handleSaveDeleteURL = () => {
     setDeleteURL(deleteUrl);
-    setDeleteTestResult(null);
   };
 
   // 测试连接
@@ -56,24 +53,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
     }
   };
 
-  // 测试删除 API 连接
-  const handleTestDeleteConnection = async () => {
-    if (!deleteUrl.trim()) {
-      alert(t('errors.pleaseConfigureFirst'));
-      return;
-    }
 
-    setIsTestingDelete(true);
-    setDeleteTestResult(null);
-
-    const success = await testConnection(deleteUrl);
-    setDeleteTestResult(success ? 'success' : 'error');
-    setIsTestingDelete(false);
-
-    if (success) {
-      setDeleteURL(deleteUrl);
-    }
-  };
 
   // 切换深色模式
   const handleToggleDarkMode = () => {
@@ -195,45 +175,6 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
                 {t('settings.deleteApi.description')}
               </p>
             </div>
-
-            {/* 测试连接按钮 */}
-            <button
-              onClick={handleTestDeleteConnection}
-              disabled={isTestingDelete || !deleteUrl.trim()}
-              className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
-            >
-              {isTestingDelete ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>{t('settings.apiConfig.testing')}</span>
-                </>
-              ) : (
-                <span>{t('settings.apiConfig.testConnection')}</span>
-              )}
-            </button>
-
-            {/* 测试结果 */}
-            {deleteTestResult && (
-              <div
-                className={`p-3 rounded-lg flex items-center gap-2 ${
-                  deleteTestResult === 'success'
-                    ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200'
-                    : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200'
-                }`}
-              >
-                {deleteTestResult === 'success' ? (
-                  <>
-                    <Check className="w-5 h-5" />
-                    <span className="text-sm">{t('settings.apiConfig.testSuccess')}</span>
-                  </>
-                ) : (
-                  <>
-                    <X className="w-5 h-5" />
-                    <span className="text-sm">{t('settings.apiConfig.testFailed')}</span>
-                  </>
-                )}
-              </div>
-            )}
           </div>
         </div>
 
