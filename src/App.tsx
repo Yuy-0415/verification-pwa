@@ -7,7 +7,7 @@ import { getDarkMode } from './utils/storage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<PageType>('codes');
-  const [darkMode, setDarkMode] = useState(false);
+  const [, setDarkMode] = useState(false);
 
   // 初始化深色模式
   useEffect(() => {
