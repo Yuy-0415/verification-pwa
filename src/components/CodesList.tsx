@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+﻿import { useState, useEffect, useCallback, useRef } from 'react';
 import { RefreshCw, Copy, Check, Trash2, AlertCircle } from 'lucide-react';
 import type { VerificationCode } from '../types';
 import { fetchVerificationCodes, APIError } from '../services/api';
@@ -19,6 +19,7 @@ export function CodesList() {
 
   const touchStartY = useRef(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const copyToastTimer = useRef<number | null>(null);
 
   // 刷新验证码列表
   const refreshCodes = useCallback(async () => {
@@ -107,10 +108,19 @@ export function CodesList() {
     try {
       await navigator.clipboard.writeText(code.code);
       setCopiedId(code.id);
+
+      // 清除之前的定时器
+      if (copyToastTimer.current !== null) {
+        clearTimeout(copyToastTimer.current);
+      }
+
       setShowCopyToast(true);
-      setTimeout(() => {
+
+      // 设置新的定时器
+      copyToastTimer.current = window.setTimeout(() => {
         setCopiedId(null);
         setShowCopyToast(false);
+        copyToastTimer.current = null;
       }, 2000);
     } catch {
       alert('复制失败');
@@ -196,11 +206,11 @@ export function CodesList() {
               id="auto-refresh"
               checked={autoRefreshEnabled}
               onChange={(e) => setAutoRefreshEnabled(e.target.checked)}
-              className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+              className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500 cursor-pointer"
             />
-            <label htmlFor="auto-refresh" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer select-none">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 select-none">
               自动刷新
-            </label>
+            </span>
           </div>
           {autoRefreshEnabled && (
             <div className="flex items-center gap-2">
@@ -321,7 +331,7 @@ export function CodesList() {
 
                 {/* 邮箱号 */}
                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                  <span className="inline-block w-5">�</span>
+                  <span className="inline-block w-5">📧</span>
                   <span>{code.phone}</span>
                 </div>
 
