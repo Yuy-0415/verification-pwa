@@ -20,15 +20,21 @@ export async function fetchVerificationCodes(url: string): Promise<VerificationC
   }
 
   try {
+    // 创建超时控制器（兼容旧版浏览器）
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
     // 发送请求
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
       },
-      // 设置超时（30秒）
-      signal: AbortSignal.timeout(30000),
+      signal: controller.signal,
     });
+
+    // 清除超时
+    clearTimeout(timeoutId);
 
     // 检查响应状态
     if (!response.ok) {
