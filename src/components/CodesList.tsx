@@ -15,6 +15,8 @@ export function CodesList() {
   const [pullDistance, setPullDistance] = useState(0);
   const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(true);
   const [autoRefreshInterval, setAutoRefreshInterval] = useState(30); // 默认30秒
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [showCopyToast, setShowCopyToast] = useState(false);
 
   const touchStartY = useRef(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -56,6 +58,14 @@ export function CodesList() {
   useEffect(() => {
     refreshCodes();
   }, [refreshCodes]);
+
+  // 更新当前时间
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // 自动刷新
   useEffect(() => {
@@ -106,15 +116,14 @@ export function CodesList() {
     try {
       await navigator.clipboard.writeText(code.code);
       setCopiedId(code.id);
-      setTimeout(() => setCopiedId(null), 2000);
+      setShowCopyToast(true);
+      setTimeout(() => {
+        setCopiedId(null);
+        setShowCopyToast(false);
+      }, 2000);
     } catch {
       alert('复制失败');
     }
-  };
-
-  // 删除验证码
-  const deleteCode = (id: string) => {
-    setCodes(codes.filter(c => c.id !== id));
   };
 
   // 清空所有验证码
@@ -127,11 +136,25 @@ export function CodesList() {
   const workerURL = getWorkerURL();
 
   return (
-    <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
+    <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900 relative">
+      {/* 复制成功提示 */}
+      {showCopyToast && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in">
+          <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2">
+            <Check className="w-5 h-5" />
+            <span className="font-medium">已复制到剪贴板</span>
+          </div>
+        </div>
+      )}
       {/* 头部 */}
       <div className="bg-white dark:bg-gray-800 shadow-sm">
         <div className="px-4 py-3 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">验证码</h1>
+          <div>
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white">验证码</h1>
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              {currentTime.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+            </div>
+          </div>
           <div className="flex gap-2">
             <button
               onClick={refreshCodes}
@@ -154,28 +177,31 @@ export function CodesList() {
         </div>
 
         {/* 自动刷新控制 */}
-        <div className="px-4 pb-3 flex items-center gap-4">
-          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+        <div className="px-4 pb-3 flex items-center justify-between bg-gray-50 dark:bg-gray-900/50 py-2 mx-4 rounded-lg">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
             <input
               type="checkbox"
               checked={autoRefreshEnabled}
               onChange={(e) => setAutoRefreshEnabled(e.target.checked)}
-              className="w-4 h-4 rounded"
+              className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
             />
             自动刷新
           </label>
           {autoRefreshEnabled && (
-            <select
-              value={autoRefreshInterval}
-              onChange={(e) => setAutoRefreshInterval(Number(e.target.value))}
-              className="px-2 py-1 text-sm border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            >
-              <option value={10}>10秒</option>
-              <option value={30}>30秒</option>
-              <option value={60}>1分钟</option>
-              <option value={120}>2分钟</option>
-              <option value={300}>5分钟</option>
-            </select>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 dark:text-gray-400">间隔:</span>
+              <select
+                value={autoRefreshInterval}
+                onChange={(e) => setAutoRefreshInterval(Number(e.target.value))}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value={10}>10秒</option>
+                <option value={30}>30秒</option>
+                <option value={60}>1分钟</option>
+                <option value={120}>2分钟</option>
+                <option value={300}>5分钟</option>
+              </select>
+            </div>
           )}
         </div>
 
@@ -259,7 +285,10 @@ export function CodesList() {
               >
                 {/* 验证码和复制按钮 */}
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-2xl font-mono font-bold text-gray-900 dark:text-white">
+                  <span
+                    onClick={() => copyCode(code)}
+                    className="text-2xl font-mono font-bold text-gray-900 dark:text-white cursor-pointer select-text active:scale-95 transition-transform"
+                  >
                     {code.code}
                   </span>
                   <button
@@ -277,22 +306,20 @@ export function CodesList() {
                 {/* 手机号 */}
                 <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
                   <span>📱</span>
-                  <span>{code.phone}</span>
+                  <span className="flex-1">{code.phone}</span>
                 </div>
 
-                {/* 时间和来源 */}
-                <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-500">
-                  <div className="flex items-center gap-3">
-                    <span>🕐 {formatRelativeTime(code.time)}</span>
-                    {code.source && <span>🏷️ {code.source}</span>}
-                  </div>
-                  <button
-                    onClick={() => deleteCode(code.id)}
-                    className="text-red-500 hover:text-red-600"
-                  >
-                    删除
-                  </button>
+                {/* 时间 */}
+                <div className="text-xs text-gray-500 dark:text-gray-500 mb-1">
+                  🕐 {formatRelativeTime(code.time)}
                 </div>
+
+                {/* 来源 */}
+                {code.source && (
+                  <div className="text-xs text-gray-500 dark:text-gray-500 truncate">
+                    🏷️ {code.source}
+                  </div>
+                )}
               </div>
             ))}
           </div>

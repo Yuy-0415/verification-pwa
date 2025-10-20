@@ -8,8 +8,8 @@ interface BottomNavProps {
 
 export function BottomNav({ currentPage, onPageChange }: BottomNavProps) {
   return (
-    <nav className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 safe-area-inset-bottom">
-      <div className="flex">
+    <nav className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+      <div className="flex pb-safe">
         <button
           onClick={() => onPageChange('codes')}
           className={`flex-1 flex flex-col items-center justify-center py-3 transition-colors ${
@@ -21,7 +21,7 @@ export function BottomNav({ currentPage, onPageChange }: BottomNavProps) {
           <MessageSquare className="w-6 h-6 mb-1" />
           <span className="text-xs font-medium">验证码</span>
         </button>
-        
+
         <button
           onClick={() => onPageChange('settings')}
           className={`flex-1 flex flex-col items-center justify-center py-3 transition-colors ${

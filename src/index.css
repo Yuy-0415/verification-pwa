@@ -33,6 +33,10 @@ body {
   padding-right: env(safe-area-inset-right);
 }
 
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 16px);
+}
+
 .safe-area-inset-bottom {
   padding-bottom: env(safe-area-inset-bottom);
 }
