@@ -97,9 +97,20 @@ npm run preview
 
 ## 🔌 API 接口规范
 
+### Cloudflare Worker 示例
+
+我们提供了一个完整的 Cloudflare Worker 示例代码，包含：
+- 邮件接收和验证码提取
+- 获取验证码列表 API
+- 删除所有邮件 API
+
+📄 **示例文件**：[cloudflare-worker-example.js](./cloudflare-worker-example.js)
+
+### 接码 API（获取验证码）
+
 你的 Cloudflare Worker 应该返回以下格式之一的 JSON 数据：
 
-### 格式 1：邮件格式（推荐）
+#### 格式 1：邮件格式（推荐）
 
 ```json
 {
@@ -119,7 +130,7 @@ npm run preview
 }
 ```
 
-### 格式 2：带状态包装
+#### 格式 2：带状态包装
 
 ```json
 {
@@ -137,7 +148,7 @@ npm run preview
 }
 ```
 
-### 格式 3：直接数组
+#### 格式 3：直接数组
 
 ```json
 [
@@ -147,6 +158,17 @@ npm run preview
     "time": "2025-10-20T10:30:00Z"
   }
 ]
+```
+
+### 删除 API（可选）
+
+用于清空所有邮件的 API，应该接受 POST 请求并返回：
+
+```json
+{
+  "success": true,
+  "message": "已清空所有邮件"
+}
 ```
 
 ### 字段说明

@@ -283,23 +283,39 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
             API 格式要求
           </h2>
-          
+
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
             Worker API 应返回以下格式之一：
           </p>
-          
-          <pre className="text-xs bg-gray-50 dark:bg-gray-900 p-3 rounded-lg overflow-x-auto text-gray-800 dark:text-gray-200 font-mono">
+
+          <pre className="text-xs bg-gray-50 dark:bg-gray-900 p-3 rounded-lg overflow-x-auto text-gray-800 dark:text-gray-200 font-mono mb-3">
 {`{
   "success": true,
-  "data": [
+  "emails": [
     {
-      "code": "123456",
-      "phone": "+86138****1234",
-      "time": "2025-10-20T10:30:00Z"
+      "id": "uuid-1",
+      "verificationCode": "123456",
+      "to": "user@example.com",
+      "receivedAt": 1729411200000,
+      "hasVerificationCode": true
     }
   ]
 }`}
           </pre>
+
+          <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
+              📄 <strong>Cloudflare Worker 示例代码</strong>
+            </p>
+            <a
+              href="https://github.com/Yuy-0415/verification-pwa/blob/main/cloudflare-worker-example.js"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline break-all"
+            >
+              查看完整示例代码 →
+            </a>
+          </div>
         </div>
 
         {/* 关于 */}
