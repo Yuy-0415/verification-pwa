@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Check, X, Loader2, Moon, Sun } from 'lucide-react';
+import { Check, X, Loader2, Moon, Sun, Globe } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { getWorkerURL, setWorkerURL, getDeleteURL, setDeleteURL, getDarkMode, setDarkMode } from '../utils/storage';
 import { testConnection } from '../services/api';
 
@@ -8,6 +9,7 @@ interface SettingsProps {
 }
 
 export function Settings({ onDarkModeChange }: SettingsProps) {
+  const { t, i18n } = useTranslation();
   const [url, setUrl] = useState('');
   const [deleteUrl, setDeleteUrlState] = useState('');
   const [isTesting, setIsTesting] = useState(false);
@@ -38,7 +40,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
   // 测试连接
   const handleTestConnection = async () => {
     if (!url.trim()) {
-      alert('请先输入 Worker URL');
+      alert(t('errors.pleaseConfigureFirst'));
       return;
     }
 
@@ -57,7 +59,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
   // 测试删除 API 连接
   const handleTestDeleteConnection = async () => {
     if (!deleteUrl.trim()) {
-      alert('请先输入删除 API URL');
+      alert(t('errors.pleaseConfigureFirst'));
       return;
     }
 
@@ -81,11 +83,33 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
     onDarkModeChange(newValue);
   };
 
+  // 语言列表（动态排序：当前语言排第一）
+  const languages = [
+    { code: 'zh-CN', name: '中文简体', nativeName: '中文简体' },
+    { code: 'zh-TW', name: '中文繁體', nativeName: '中文繁體' },
+    { code: 'en', name: 'English', nativeName: 'English' },
+    { code: 'ja', name: '日本語', nativeName: '日本語' },
+    { code: 'ko', name: '한국어', nativeName: '한국어' },
+  ];
+
+  // 动态排序：当前语言排第一
+  const sortedLanguages = [...languages].sort((a, b) => {
+    if (a.code === i18n.language) return -1;
+    if (b.code === i18n.language) return 1;
+    return 0;
+  });
+
+  // 切换语言
+  const handleLanguageChange = (langCode: string) => {
+    i18n.changeLanguage(langCode);
+    localStorage.setItem('language', langCode);
+  };
+
   return (
     <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
       {/* 头部 */}
       <div className="bg-white dark:bg-gray-800 shadow-sm px-4 py-3">
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white">设置</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-white">{t('nav.settings')}</h1>
       </div>
 
       {/* 内容区域 */}
@@ -93,13 +117,13 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
         {/* 接码 API 配置 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            接码 API 配置
+            {t('settings.apiConfig.title')}
           </h2>
 
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                接码 Cloudflare Worker API 地址
+                {t('settings.apiConfig.label')}
               </label>
               <input
                 type="url"
@@ -110,7 +134,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                用于获取验证码的 API 地址
+                {t('settings.apiConfig.description')}
               </p>
             </div>
 
@@ -123,10 +147,10 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
               {isTesting ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>测试中...</span>
+                  <span>{t('settings.apiConfig.testing')}</span>
                 </>
               ) : (
-                <span>测试连接</span>
+                <span>{t('settings.apiConfig.testConnection')}</span>
               )}
             </button>
 
@@ -142,12 +166,12 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
                 {testResult === 'success' ? (
                   <>
                     <Check className="w-5 h-5" />
-                    <span className="text-sm">连接成功！URL 配置正确</span>
+                    <span className="text-sm">{t('settings.apiConfig.testSuccess')}</span>
                   </>
                 ) : (
                   <>
                     <X className="w-5 h-5" />
-                    <span className="text-sm">连接失败，请检查 URL 是否正确</span>
+                    <span className="text-sm">{t('settings.apiConfig.testFailed')}</span>
                   </>
                 )}
               </div>
@@ -158,13 +182,13 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
         {/* 删除 API 配置 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            删除 API 配置
+            {t('settings.deleteApi.title')}
           </h2>
 
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                删除 Cloudflare Worker API 地址
+                {t('settings.deleteApi.label')}
               </label>
               <input
                 type="url"
@@ -175,7 +199,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                用于清空所有邮件的 API 地址（可选）
+                {t('settings.deleteApi.description')}
               </p>
             </div>
 
@@ -188,10 +212,10 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
               {isTestingDelete ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>测试中...</span>
+                  <span>{t('settings.apiConfig.testing')}</span>
                 </>
               ) : (
-                <span>测试连接</span>
+                <span>{t('settings.apiConfig.testConnection')}</span>
               )}
             </button>
 
@@ -207,12 +231,12 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
                 {deleteTestResult === 'success' ? (
                   <>
                     <Check className="w-5 h-5" />
-                    <span className="text-sm">连接成功！URL 配置正确</span>
+                    <span className="text-sm">{t('settings.apiConfig.testSuccess')}</span>
                   </>
                 ) : (
                   <>
                     <X className="w-5 h-5" />
-                    <span className="text-sm">连接失败，请检查 URL 是否正确</span>
+                    <span className="text-sm">{t('settings.apiConfig.testFailed')}</span>
                   </>
                 )}
               </div>
@@ -223,17 +247,17 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
         {/* 外观设置 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            外观
+            {t('settings.appearance.title')}
           </h2>
-          
-          <div className="flex items-center justify-between">
+
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               {darkMode ? (
                 <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
               ) : (
                 <Sun className="w-5 h-5 text-gray-700 dark:text-gray-300" />
               )}
-              <span className="text-gray-900 dark:text-white">深色模式</span>
+              <span className="text-gray-900 dark:text-white">{t('settings.appearance.darkMode')}</span>
             </div>
             <button
               onClick={handleToggleDarkMode}
@@ -248,32 +272,55 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
               />
             </button>
           </div>
+
+          {/* 语言选择 */}
+          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-3 mb-3">
+              <Globe className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+              <span className="text-gray-900 dark:text-white">{t('settings.appearance.language')}</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {sortedLanguages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => handleLanguageChange(lang.code)}
+                  className={`px-4 py-2 rounded-lg border transition-colors ${
+                    i18n.language === lang.code
+                      ? 'bg-blue-500 text-white border-blue-500'
+                      : 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 hover:border-blue-500'
+                  }`}
+                >
+                  {lang.nativeName}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* 使用说明 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            使用说明
+            {t('settings.usage.title')}
           </h2>
-          
+
           <div className="space-y-3 text-sm text-gray-600 dark:text-gray-400">
             <div className="flex gap-3">
               <span className="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center font-semibold">
                 1
               </span>
-              <p>在上方输入框中填入你的 Cloudflare Worker API 地址</p>
+              <p>{t('settings.usage.step1')}</p>
             </div>
             <div className="flex gap-3">
               <span className="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center font-semibold">
                 2
               </span>
-              <p>点击「测试连接」按钮验证 URL 是否可用</p>
+              <p>{t('settings.usage.step2')}</p>
             </div>
             <div className="flex gap-3">
               <span className="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center font-semibold">
                 3
               </span>
-              <p>切换到「验证码」标签页，点击刷新按钮获取最新数据</p>
+              <p>{t('settings.usage.step3')}</p>
             </div>
           </div>
         </div>
@@ -281,11 +328,11 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
         {/* API 格式说明 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            API 格式要求
+            {t('settings.apiFormat.title')}
           </h2>
 
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-            Worker API 应返回以下格式之一：
+            {t('settings.apiFormat.description')}
           </p>
 
           <pre className="text-xs bg-gray-50 dark:bg-gray-900 p-3 rounded-lg overflow-x-auto text-gray-800 dark:text-gray-200 font-mono mb-3">
@@ -305,7 +352,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
 
           <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
-              📄 <strong>Cloudflare Worker 示例代码</strong>
+              📄 <strong>{t('settings.apiFormat.exampleCode')}</strong>
             </p>
             <a
               href="https://github.com/Yuy-0415/verification-pwa/blob/main/cloudflare-worker-example.js"
@@ -313,7 +360,7 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
               rel="noopener noreferrer"
               className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline break-all"
             >
-              查看完整示例代码 →
+              {t('settings.apiFormat.viewExample')} →
             </a>
           </div>
         </div>
@@ -321,24 +368,24 @@ export function Settings({ onDarkModeChange }: SettingsProps) {
         {/* 关于 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            关于
+            {t('about.title')}
           </h2>
 
           <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
             <div className="flex justify-between">
-              <span>版本</span>
+              <span>{t('about.version')}</span>
               <span className="text-gray-900 dark:text-white">1.0.0</span>
             </div>
             <div className="flex justify-between">
-              <span>类型</span>
-              <span className="text-gray-900 dark:text-white">PWA 应用</span>
+              <span>{t('about.type')}</span>
+              <span className="text-gray-900 dark:text-white">{t('about.pwaApp')}</span>
             </div>
             <div className="flex justify-between">
-              <span>作者</span>
+              <span>{t('about.author')}</span>
               <span className="text-gray-900 dark:text-white">执</span>
             </div>
             <div className="flex justify-between items-center">
-              <span>博客</span>
+              <span>{t('about.blog')}</span>
               <a
                 href="https://aigcview.top/"
                 target="_blank"

@@ -1,4 +1,5 @@
 import { MessageSquare, Settings } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { PageType } from '../types';
 
 interface BottomNavProps {
@@ -7,6 +8,8 @@ interface BottomNavProps {
 }
 
 export function BottomNav({ currentPage, onPageChange }: BottomNavProps) {
+  const { t } = useTranslation();
+
   return (
     <nav className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
       <div className="flex pb-safe">
@@ -19,7 +22,7 @@ export function BottomNav({ currentPage, onPageChange }: BottomNavProps) {
           }`}
         >
           <MessageSquare className="w-6 h-6 mb-1" />
-          <span className="text-xs font-medium">验证码</span>
+          <span className="text-xs font-medium">{t('nav.codes')}</span>
         </button>
 
         <button
@@ -31,7 +34,7 @@ export function BottomNav({ currentPage, onPageChange }: BottomNavProps) {
           }`}
         >
           <Settings className="w-6 h-6 mb-1" />
-          <span className="text-xs font-medium">设置</span>
+          <span className="text-xs font-medium">{t('nav.settings')}</span>
         </button>
       </div>
     </nav>

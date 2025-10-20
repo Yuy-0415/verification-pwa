@@ -11,9 +11,11 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "i18next": "^25.6.0",
+    "lucide-react": "^0.294.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "lucide-react": "^0.294.0"
+    "react-i18next": "^16.1.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
@@ -33,4 +35,3 @@
     "workbox-window": "^7.0.0"
   }
 }
-

@@ -1,0 +1,99 @@
+{
+  "app": {
+    "title": "Cloudflare Worker 邮箱接码"
+  },
+  "nav": {
+    "codes": "验证码",
+    "settings": "设置",
+    "about": "关于"
+  },
+  "codes": {
+    "title": "验证码列表",
+    "refresh": "刷新",
+    "clearAll": "清空所有",
+    "copy": "复制",
+    "copied": "已复制到剪贴板",
+    "empty": {
+      "title": "暂无验证码",
+      "description": "点击右上角刷新按钮获取验证码"
+    },
+    "pullToRefresh": "下拉刷新",
+    "releaseToRefresh": "释放刷新",
+    "refreshing": "刷新中...",
+    "autoRefresh": {
+      "label": "自动刷新",
+      "interval": "刷新间隔",
+      "5s": "5秒",
+      "10s": "10秒",
+      "30s": "30秒",
+      "1m": "1分钟",
+      "2m": "2分钟",
+      "5m": "5分钟"
+    },
+    "time": {
+      "justNow": "刚刚",
+      "minutesAgo": "{{count}}分钟前",
+      "hoursAgo": "{{count}}小时前",
+      "daysAgo": "{{count}}天前"
+    },
+    "confirmClear": "确定要清空所有验证码吗？",
+    "clearSuccess": "清空成功",
+    "clearFailed": "清空失败"
+  },
+  "settings": {
+    "title": "设置",
+    "apiConfig": {
+      "title": "接码 API 配置",
+      "urlLabel": "接码 API URL",
+      "urlPlaceholder": "https://your-worker.workers.dev/api/codes",
+      "testConnection": "测试连接",
+      "testing": "测试中...",
+      "testSuccess": "连接成功",
+      "testFailed": "连接失败",
+      "saveSuccess": "保存成功"
+    },
+    "deleteApiConfig": {
+      "title": "删除 API 配置",
+      "description": "配置后可使用'清空所有'功能",
+      "urlLabel": "删除 API URL",
+      "urlPlaceholder": "https://your-worker.workers.dev/api/delete"
+    },
+    "appearance": {
+      "title": "外观设置",
+      "darkMode": "深色模式"
+    },
+    "language": {
+      "title": "语言设置",
+      "label": "选择语言",
+      "zh-CN": "简体中文",
+      "zh-TW": "繁體中文",
+      "en": "English",
+      "ja": "日本語",
+      "ko": "한국어"
+    },
+    "apiFormat": {
+      "title": "API 格式要求",
+      "description": "Worker API 应返回以下格式之一：",
+      "exampleTitle": "Cloudflare Worker 示例代码",
+      "viewExample": "查看完整示例代码"
+    }
+  },
+  "about": {
+    "title": "关于",
+    "version": "版本",
+    "type": "类型",
+    "typeValue": "PWA 应用",
+    "author": "作者",
+    "blog": "博客"
+  },
+  "errors": {
+    "notConfigured": "未配置 Worker URL",
+    "pleaseConfigureFirst": "请先在设置页面配置 Worker URL",
+    "networkError": "网络错误",
+    "timeout": "请求超时",
+    "invalidResponse": "无效的响应格式",
+    "missingFields": "验证码数据缺少必填字段",
+    "unknown": "未知错误"
+  }
+}
+

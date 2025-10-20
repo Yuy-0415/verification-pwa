@@ -1,0 +1,99 @@
+{
+  "app": {
+    "title": "Cloudflare Worker 郵箱接碼"
+  },
+  "nav": {
+    "codes": "驗證碼",
+    "settings": "設定",
+    "about": "關於"
+  },
+  "codes": {
+    "title": "驗證碼列表",
+    "refresh": "重新整理",
+    "clearAll": "清空所有",
+    "copy": "複製",
+    "copied": "已複製到剪貼簿",
+    "empty": {
+      "title": "暫無驗證碼",
+      "description": "點擊右上角重新整理按鈕獲取驗證碼"
+    },
+    "pullToRefresh": "下拉重新整理",
+    "releaseToRefresh": "釋放重新整理",
+    "refreshing": "重新整理中...",
+    "autoRefresh": {
+      "label": "自動重新整理",
+      "interval": "重新整理間隔",
+      "5s": "5秒",
+      "10s": "10秒",
+      "30s": "30秒",
+      "1m": "1分鐘",
+      "2m": "2分鐘",
+      "5m": "5分鐘"
+    },
+    "time": {
+      "justNow": "剛剛",
+      "minutesAgo": "{{count}}分鐘前",
+      "hoursAgo": "{{count}}小時前",
+      "daysAgo": "{{count}}天前"
+    },
+    "confirmClear": "確定要清空所有驗證碼嗎？",
+    "clearSuccess": "清空成功",
+    "clearFailed": "清空失敗"
+  },
+  "settings": {
+    "title": "設定",
+    "apiConfig": {
+      "title": "接碼 API 配置",
+      "urlLabel": "接碼 API URL",
+      "urlPlaceholder": "https://your-worker.workers.dev/api/codes",
+      "testConnection": "測試連線",
+      "testing": "測試中...",
+      "testSuccess": "連線成功",
+      "testFailed": "連線失敗",
+      "saveSuccess": "儲存成功"
+    },
+    "deleteApiConfig": {
+      "title": "刪除 API 配置",
+      "description": "配置後可使用「清空所有」功能",
+      "urlLabel": "刪除 API URL",
+      "urlPlaceholder": "https://your-worker.workers.dev/api/delete"
+    },
+    "appearance": {
+      "title": "外觀設定",
+      "darkMode": "深色模式"
+    },
+    "language": {
+      "title": "語言設定",
+      "label": "選擇語言",
+      "zh-CN": "简体中文",
+      "zh-TW": "繁體中文",
+      "en": "English",
+      "ja": "日本語",
+      "ko": "한국어"
+    },
+    "apiFormat": {
+      "title": "API 格式要求",
+      "description": "Worker API 應返回以下格式之一：",
+      "exampleTitle": "Cloudflare Worker 範例程式碼",
+      "viewExample": "查看完整範例程式碼"
+    }
+  },
+  "about": {
+    "title": "關於",
+    "version": "版本",
+    "type": "類型",
+    "typeValue": "PWA 應用程式",
+    "author": "作者",
+    "blog": "部落格"
+  },
+  "errors": {
+    "notConfigured": "未配置 Worker URL",
+    "pleaseConfigureFirst": "請先在設定頁面配置 Worker URL",
+    "networkError": "網路錯誤",
+    "timeout": "請求逾時",
+    "invalidResponse": "無效的回應格式",
+    "missingFields": "驗證碼資料缺少必填欄位",
+    "unknown": "未知錯誤"
+  }
+}
+

@@ -1,11 +1,13 @@
 ﻿import { useState, useEffect, useCallback, useRef } from 'react';
 import { RefreshCw, Copy, Check, Trash2, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { VerificationCode } from '../types';
 import { fetchVerificationCodes, APIError } from '../services/api';
 import { getWorkerURL, getDeleteURL } from '../utils/storage';
 import { formatRelativeTime, formatAbsoluteTime } from '../utils/time';
 
 export function CodesList() {
+  const { t } = useTranslation();
   const [codes, setCodes] = useState<VerificationCode[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,9 +26,9 @@ export function CodesList() {
   // 刷新验证码列表
   const refreshCodes = useCallback(async () => {
     const workerURL = getWorkerURL();
-    
+
     if (!workerURL) {
-      setError('请先在设置中配置 Worker URL');
+      setError(t('errors.pleaseConfigureFirst'));
       return;
     }
 
@@ -47,12 +49,12 @@ export function CodesList() {
       if (err instanceof APIError) {
         setError(err.message);
       } else {
-        setError('未知错误');
+        setError(t('errors.unknown'));
       }
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   // 初始加载
   useEffect(() => {
@@ -123,7 +125,7 @@ export function CodesList() {
         copyToastTimer.current = null;
       }, 2000);
     } catch {
-      alert('复制失败');
+      alert(t('codes.copy') + ' ' + t('codes.clearFailed'));
     }
   };
 
@@ -132,11 +134,11 @@ export function CodesList() {
     const deleteUrl = getDeleteURL();
 
     if (!deleteUrl) {
-      alert('请先在设置中配置删除 API URL');
+      alert(t('errors.pleaseConfigureFirst'));
       return;
     }
 
-    if (!confirm('确定要清空所有邮件吗？此操作将调用删除 API。')) {
+    if (!confirm(t('codes.confirmClear'))) {
       return;
     }
 
@@ -149,14 +151,14 @@ export function CodesList() {
       });
 
       if (!response.ok) {
-        throw new Error('删除失败');
+        throw new Error(t('codes.clearFailed'));
       }
 
       setCodes([]);
-      alert('清空成功！');
+      alert(t('codes.clearSuccess'));
     } catch (error) {
-      console.error('清空失败:', error);
-      alert('清空失败，请检查删除 API 配置');
+      console.error(t('codes.clearFailed'), error);
+      alert(t('codes.clearFailed'));
     }
   };
 
@@ -169,20 +171,20 @@ export function CodesList() {
         <div className="fixed top-20 left-0 right-0 flex justify-center z-50 px-4">
           <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in">
             <Check className="w-5 h-5" />
-            <span className="font-medium">已复制到剪贴板</span>
+            <span className="font-medium">{t('codes.copied')}</span>
           </div>
         </div>
       )}
       {/* 头部 */}
       <div className="bg-white dark:bg-gray-800 shadow-sm">
         <div className="px-4 py-3 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-gray-900 dark:text-white">Cloudflare Worker 邮箱接码</h1>
+          <h1 className="text-lg font-bold text-gray-900 dark:text-white">{t('app.title')}</h1>
           <div className="flex gap-2">
             <button
               onClick={refreshCodes}
               disabled={isLoading}
               className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              title="刷新"
+              title={t('codes.refresh')}
             >
               <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
             </button>
@@ -190,7 +192,7 @@ export function CodesList() {
               <button
                 onClick={clearAll}
                 className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
-                title="清空所有"
+                title={t('codes.clearAll')}
               >
                 <Trash2 className="w-5 h-5" />
               </button>
@@ -209,23 +211,23 @@ export function CodesList() {
               className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500 cursor-pointer"
             />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300 select-none">
-              自动刷新
+              {t('codes.autoRefresh.label')}
             </span>
           </div>
           {autoRefreshEnabled && (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 dark:text-gray-400">间隔:</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">{t('codes.autoRefresh.interval')}:</span>
               <select
                 value={autoRefreshInterval}
                 onChange={(e) => setAutoRefreshInterval(Number(e.target.value))}
                 className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value={5}>5秒</option>
-                <option value={10}>10秒</option>
-                <option value={30}>30秒</option>
-                <option value={60}>1分钟</option>
-                <option value={120}>2分钟</option>
-                <option value={300}>5分钟</option>
+                <option value={5}>{t('codes.autoRefresh.5s')}</option>
+                <option value={10}>{t('codes.autoRefresh.10s')}</option>
+                <option value={30}>{t('codes.autoRefresh.30s')}</option>
+                <option value={60}>{t('codes.autoRefresh.1m')}</option>
+                <option value={120}>{t('codes.autoRefresh.2m')}</option>
+                <option value={300}>{t('codes.autoRefresh.5m')}</option>
               </select>
             </div>
           )}
@@ -233,7 +235,7 @@ export function CodesList() {
 
         {lastRefreshTime && (
           <div className="px-4 pb-2 text-xs text-gray-500 dark:text-gray-400">
-            最后刷新: {formatAbsoluteTime(lastRefreshTime.getTime())}
+            {t('codes.refresh')}: {formatAbsoluteTime(lastRefreshTime.getTime())}
           </div>
         )}
       </div>
@@ -257,7 +259,7 @@ export function CodesList() {
           >
             <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
               <RefreshCw className={`w-4 h-4 ${isPulling ? 'animate-spin' : ''}`} />
-              {isPulling ? '松开刷新' : '下拉刷新'}
+              {isPulling ? t('codes.releaseToRefresh') : t('codes.pullToRefresh')}
             </div>
           </div>
         )}
@@ -278,10 +280,10 @@ export function CodesList() {
           <div className="flex flex-col items-center justify-center h-full p-8 text-center">
             <AlertCircle className="w-16 h-16 text-gray-400 mb-4" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              未配置 Worker URL
+              {t('errors.notConfigured')}
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              请先在设置中配置 Cloudflare Worker 的 URL 地址
+              {t('errors.pleaseConfigureFirst')}
             </p>
           </div>
         )}
@@ -293,10 +295,10 @@ export function CodesList() {
               <span className="text-2xl">📭</span>
             </div>
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              暂无验证码
+              {t('codes.empty.title')}
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              点击右上角刷新按钮获取最新验证码
+              {t('codes.empty.description')}
             </p>
           </div>
         )}

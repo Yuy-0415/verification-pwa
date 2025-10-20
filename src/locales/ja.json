@@ -1,0 +1,99 @@
+{
+  "app": {
+    "title": "Cloudflare Worker メール認証"
+  },
+  "nav": {
+    "codes": "認証コード",
+    "settings": "設定",
+    "about": "について"
+  },
+  "codes": {
+    "title": "認証コード一覧",
+    "refresh": "更新",
+    "clearAll": "すべてクリア",
+    "copy": "コピー",
+    "copied": "クリップボードにコピーしました",
+    "empty": {
+      "title": "認証コードがありません",
+      "description": "右上の更新ボタンをクリックして認証コードを取得してください"
+    },
+    "pullToRefresh": "引っ張って更新",
+    "releaseToRefresh": "離して更新",
+    "refreshing": "更新中...",
+    "autoRefresh": {
+      "label": "自動更新",
+      "interval": "更新間隔",
+      "5s": "5秒",
+      "10s": "10秒",
+      "30s": "30秒",
+      "1m": "1分",
+      "2m": "2分",
+      "5m": "5分"
+    },
+    "time": {
+      "justNow": "たった今",
+      "minutesAgo": "{{count}}分前",
+      "hoursAgo": "{{count}}時間前",
+      "daysAgo": "{{count}}日前"
+    },
+    "confirmClear": "すべての認証コードをクリアしてもよろしいですか？",
+    "clearSuccess": "クリアしました",
+    "clearFailed": "クリアに失敗しました"
+  },
+  "settings": {
+    "title": "設定",
+    "apiConfig": {
+      "title": "API 設定",
+      "urlLabel": "API URL",
+      "urlPlaceholder": "https://your-worker.workers.dev/api/codes",
+      "testConnection": "接続テスト",
+      "testing": "テスト中...",
+      "testSuccess": "接続成功",
+      "testFailed": "接続失敗",
+      "saveSuccess": "保存しました"
+    },
+    "deleteApiConfig": {
+      "title": "削除 API 設定",
+      "description": "設定後「すべてクリア」機能が使用できます",
+      "urlLabel": "削除 API URL",
+      "urlPlaceholder": "https://your-worker.workers.dev/api/delete"
+    },
+    "appearance": {
+      "title": "外観設定",
+      "darkMode": "ダークモード"
+    },
+    "language": {
+      "title": "言語設定",
+      "label": "言語を選択",
+      "zh-CN": "简体中文",
+      "zh-TW": "繁體中文",
+      "en": "English",
+      "ja": "日本語",
+      "ko": "한국어"
+    },
+    "apiFormat": {
+      "title": "API フォーマット要件",
+      "description": "Worker API は次のいずれかの形式を返す必要があります：",
+      "exampleTitle": "Cloudflare Worker サンプルコード",
+      "viewExample": "完全なサンプルコードを表示"
+    }
+  },
+  "about": {
+    "title": "について",
+    "version": "バージョン",
+    "type": "タイプ",
+    "typeValue": "PWA アプリケーション",
+    "author": "作者",
+    "blog": "ブログ"
+  },
+  "errors": {
+    "notConfigured": "Worker URL が設定されていません",
+    "pleaseConfigureFirst": "設定ページで Worker URL を設定してください",
+    "networkError": "ネットワークエラー",
+    "timeout": "リクエストタイムアウト",
+    "invalidResponse": "無効なレスポンス形式",
+    "missingFields": "認証コードデータに必須フィールドがありません",
+    "unknown": "不明なエラー"
+  }
+}
+

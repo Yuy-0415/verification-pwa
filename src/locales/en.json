@@ -1,0 +1,102 @@
+{
+  "app": {
+    "title": "Cloudflare Worker Email Verification"
+  },
+  "nav": {
+    "codes": "Codes",
+    "settings": "Settings",
+    "about": "About"
+  },
+  "codes": {
+    "title": "Verification Codes",
+    "refresh": "Refresh",
+    "clearAll": "Clear All",
+    "copy": "Copy",
+    "copied": "Copied to clipboard",
+    "empty": {
+      "title": "No verification codes",
+      "description": "Click the refresh button in the top right to get codes"
+    },
+    "pullToRefresh": "Pull to refresh",
+    "releaseToRefresh": "Release to refresh",
+    "refreshing": "Refreshing...",
+    "autoRefresh": {
+      "label": "Auto Refresh",
+      "interval": "Refresh Interval",
+      "5s": "5 seconds",
+      "10s": "10 seconds",
+      "30s": "30 seconds",
+      "1m": "1 minute",
+      "2m": "2 minutes",
+      "5m": "5 minutes"
+    },
+    "time": {
+      "justNow": "Just now",
+      "minutesAgo": "{{count}} minutes ago",
+      "minutesAgo_one": "{{count}} minute ago",
+      "hoursAgo": "{{count}} hours ago",
+      "hoursAgo_one": "{{count}} hour ago",
+      "daysAgo": "{{count}} days ago",
+      "daysAgo_one": "{{count}} day ago"
+    },
+    "confirmClear": "Are you sure you want to clear all verification codes?",
+    "clearSuccess": "Cleared successfully",
+    "clearFailed": "Failed to clear"
+  },
+  "settings": {
+    "title": "Settings",
+    "apiConfig": {
+      "title": "API Configuration",
+      "urlLabel": "API URL",
+      "urlPlaceholder": "https://your-worker.workers.dev/api/codes",
+      "testConnection": "Test Connection",
+      "testing": "Testing...",
+      "testSuccess": "Connection successful",
+      "testFailed": "Connection failed",
+      "saveSuccess": "Saved successfully"
+    },
+    "deleteApiConfig": {
+      "title": "Delete API Configuration",
+      "description": "Configure to enable \"Clear All\" feature",
+      "urlLabel": "Delete API URL",
+      "urlPlaceholder": "https://your-worker.workers.dev/api/delete"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "darkMode": "Dark Mode"
+    },
+    "language": {
+      "title": "Language",
+      "label": "Select Language",
+      "zh-CN": "简体中文",
+      "zh-TW": "繁體中文",
+      "en": "English",
+      "ja": "日本語",
+      "ko": "한국어"
+    },
+    "apiFormat": {
+      "title": "API Format Requirements",
+      "description": "Worker API should return one of the following formats:",
+      "exampleTitle": "Cloudflare Worker Example Code",
+      "viewExample": "View complete example code"
+    }
+  },
+  "about": {
+    "title": "About",
+    "version": "Version",
+    "type": "Type",
+    "typeValue": "PWA Application",
+    "author": "Author",
+    "blog": "Blog"
+  },
+  "errors": {
+    "notConfigured": "Worker URL not configured",
+    "pleaseConfigureFirst": "Please configure Worker URL in settings first",
+    "networkError": "Network error",
+    "timeout": "Request timeout",
+    "invalidResponse": "Invalid response format",
+    "missingFields": "Verification code data missing required fields",
+    "unknown": "Unknown error"
+  }
+}
+
